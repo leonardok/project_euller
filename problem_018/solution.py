@@ -18,6 +18,9 @@ from array import array
 
 tree_file = 'tree.txt'
 
+#------------------------#
+# This class is the tree #
+#------------------------#
 class MotherfuckingTriangleTreeList(object):
 	def __init__(self):
 		self.value = 0
@@ -31,6 +34,10 @@ class MotherfuckingTriangleTreeList(object):
 		self.last_element = None
 		self.depth = 0
 
+
+#----------------#
+# Debug an array #
+#----------------#
 def debug_array(array, prefix = ''):
 	array_str = ''
 	for node in array:
@@ -39,6 +46,16 @@ def debug_array(array, prefix = ''):
 	print prefix + ' - ' + array_str
 
 
+#----------------#
+# Do the walking #
+#----------------#
+#
+# This function will walk through the tree and find the best matching.
+# The only thing thats keeps the program to make a depth walk is the condition
+# that prevents to go any further if the maximum sum of the elements to come is
+# less than the current best match, assuming all elements ahead are 99 (our max
+# value for the proposed problem).
+#
 def walk(tree, node, array, current_sum, best, best_sum):
 	if node: print 'walking into ' + str(node.value)
 
@@ -46,6 +63,8 @@ def walk(tree, node, array, current_sum, best, best_sum):
 		array.append(node)
 		current_sum += int(node.value)
 
+	# Is the current sum plus a lot of 99 less than out current best?
+	# if so, give this path up and try another.
 	envisioned_sum = ( (tree[0].depth - len(array)) * 99 ) + current_sum
 	if envisioned_sum < best_sum:
 		# print 'visioned sum ' + str(envisioned_sum) + ' < best ' + str(int(best_sum)) + ' array size ' + str(len(array))
@@ -72,19 +91,29 @@ def main():
 	tree_list = []
 	total_lines = 0
 
+	# load the file content into a list
 	fp = open(tree_file)
-
 	for line in fp:
 		numbers = line.split()
+		total_lines += 1
 		for number in numbers:
 			new_item = MotherfuckingTriangleTreeList()
 			new_item.value = number
 			tree_list.append(new_item)
-
-		total_lines += 1
-
 	fp.close()
 
+
+	# this is the logic to load the tree. Each element has as childs the
+	# the "current line number" + "node index on the list"
+	#
+	#  tree    line#   so the first element has as childs:
+	#                  element index (1) + -> line# (1) (left child)
+	#    1       1                         -> line# + 1 (right child)
+	#   2 3      2
+	#  4 5 6     3     5th element:
+	# 7 8 9 0    4     element index (5) + -> line# (3) = elem #8
+	#                                      -> line# + 1 = elem #9
+	#
 
 	line_index = 1
 	elements_to_next_line = 1
