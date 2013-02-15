@@ -1,5 +1,8 @@
 #!/usr/bin/python
 
+# Problem 18 from Project Euller
+# (http://projecteuler.net/index.php?section=problems&id=18)
+#
 # This same structure is inside tree.txt.
 #
 # By starting at the top of the triangle below and moving to adjacent numbers
